@@ -1,0 +1,56 @@
+[project]
+name = "davinci-resolve-scripts"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+authors = [
+    { name = "yuru-sha", email = "yurusha11@gmail.com" },
+]
+maintainers = [
+    { name = "yuru-sha", email = "yurusha11@gmail.com" },
+]
+dependencies = [
+    "exifread>=3.5.1",
+    "pillow>=12.1.0",
+    "rawpy>=0.25.1",
+    "ruff>=0.14.10",
+]
+
+# ---------------------------------------------------------------------------
+# Ruff configuration
+# ---------------------------------------------------------------------------
+
+[tool.ruff]
+line-length = 120
+exclude = []
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "UP", "C90", "N", "D", "S", "ANN", "ASYNC", "B", "BLE", "ERA", "EXE", "FA", "FLY", "FURB", "G", "ICN", "LOG", "PIE", "PL", "PT", "PYI", "Q", "RET", "RSE", "RUF", "SIM", "SLF", "SLOT", "T10", "T20", "TCH", "TID", "TRY", "YTT"]
+ignore = [
+    "E501", "RUF001", "RUF002", "RUF003", "ERA001",
+    "D100", "D103", "D104", "D105", "D106", "D107", "D203", "D212", "D400", "D401", "D415",
+    "ANN001", "ANN002", "ANN003", "ANN201", "ANN202", "ANN401", "N999", "N802",
+    "PLR0911",  # Too many return statements - acceptable for guard clauses
+    "PLR0913",  # Too many arguments (often unavoidable in config/setup functions)
+    "PLR0915",  # Too many statements (especially common in dashboard pages)
+    "PLR0912",  # Too many branches (CLI commands naturally have many branches)
+    "C901",     # Complex functions (CLI commands are inherently complex)
+    "T201",     # print() is required for DaVinci Resolve script output
+    "S110",     # try-except-pass is used for optional features
+    "S112",     # try-except-continue is used for optional features
+    "BLE001",   # Catching general Exception is acceptable for user-facing scripts
+    "SLF001",   # Private member access is necessary for PIL compatibility
+    "E701",     # Multiple statements on one line (colon) - compact style preferred
+    "E722",     # Bare except - necessary for robust error handling in DaVinci Resolve scripts
+    "PLC0415",  # Import outside top-level - conditional imports used for optional features
+    "RUF059",   # Unpacked variable never used - some unpacking is for clarity
+    "SIM108",   # Ternary operator - if-else blocks are more readable for complex conditions
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
