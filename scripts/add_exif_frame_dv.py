@@ -264,8 +264,8 @@ def main():
     default_cam, default_set = create_exif_string(temp_exif)
 
     fusion = resolve_obj.Fusion()
-    ui = fusion.UIManager
-    dispatcher = fusion.Dispatcher
+    ui = fusion.UIManager()
+    dispatcher = bmd.UIDispatcher(ui)
 
     win = dispatcher.AddWindow({
         "ID": "ExifWin", "Geometry": [500, 300, 450, 320], "WindowTitle": "Exif Frame (Studio)",
