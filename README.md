@@ -10,6 +10,7 @@ DaVinci Resolve用のPythonスクリプト集。画像にEXIF情報を含むPola
 - **幅広いフォーマット対応**: JPEG、PNG、RAW（ARW/CR2/CR3/NEF/DNG/RAF/ORF）
 - **自動EXIF抽出**: カメラ名、レンズ、撮影設定（焦点距離、絞り、シャッター速度、ISO）
 - **動的パス検出**: 環境に応じてPython依存関係を自動検出
+- **クロスプラットフォーム対応**: macOSとWindows両方で動作
 
 ## 必要要件
 
@@ -40,6 +41,11 @@ uv sync
 make check
 ```
 
+**Windowsの場合**:
+```bash
+python scripts/install.py check
+```
+
 ### 3. スクリプトのインストール
 
 ```bash
@@ -47,9 +53,21 @@ make check
 make install
 ```
 
+**Windowsの場合**:
+```bash
+python scripts/install.py install
+```
+
 スクリプトは以下にインストールされます:
+
+**macOS**:
 ```
 ~/Library/Application Support/Blackmagic Design/DaVinci Resolve/Fusion/Scripts/Utility
+```
+
+**Windows**:
+```
+%APPDATA%\Blackmagic Design\DaVinci Resolve\Fusion\Scripts\Utility
 ```
 
 ### 4. DaVinci Resolveの再起動
@@ -100,7 +118,11 @@ make fix
 ### アンインストール
 
 ```bash
+# macOS/Linux
 make uninstall
+
+# Windows
+python scripts/install.py uninstall
 ```
 
 ## 技術詳細
@@ -121,15 +143,35 @@ make uninstall
 
 手動でパスを指定する場合：
 
+**macOS/Linux**:
 ```bash
 export DAVINCI_RESOLVE_SCRIPTS_VENV=/path/to/.venv/lib/python3.11/site-packages
+```
+
+**Windows (PowerShell)**:
+```powershell
+$env:DAVINCI_RESOLVE_SCRIPTS_VENV="C:\path\to\.venv\Lib\site-packages"
+```
+
+**Windows (コマンドプロンプト)**:
+```cmd
+set DAVINCI_RESOLVE_SCRIPTS_VENV=C:\path\to\.venv\Lib\site-packages
 ```
 
 ### システム要件の詳細
 
 - **Python**: 3.11以上（DaVinci Resolve Studio 19/20との互換性）
 - **ライブラリ**: Pillow、rawpy、exifread
-- **プラットフォーム**: macOS（Windowsは要調整）
+- **プラットフォーム**: macOS、Windows（自動検出）
+
+### クロスプラットフォーム対応
+
+Pythonベースのインストーラー（[scripts/install.py](scripts/install.py)）により、以下を自動処理：
+
+- プラットフォーム自動検出（macOS / Windows）
+- OS別インストールパス選択
+- 仮想環境のsite-packagesパス検出
+- スクリプトへのパス埋め込み
 
 ## トラブルシューティング
 
@@ -141,7 +183,7 @@ ERROR: Could not find required libraries.
 
 **解決策**:
 1. `uv sync` を実行して依存関係をインストール
-2. `make check` で環境を確認
+2. `make check` (またはWindows: `python scripts/install.py check`) で環境を確認
 3. 必要に応じて環境変数を設定
 
 ### スクリプトがメニューに表示されない
@@ -149,7 +191,26 @@ ERROR: Could not find required libraries.
 **解決策**:
 1. DaVinci Resolveを完全に再起動
 2. インストール先ディレクトリを確認
-3. `make install` を再実行
+   - macOS: `~/Library/Application Support/Blackmagic Design/DaVinci Resolve/Fusion/Scripts/Utility`
+   - Windows: `%APPDATA%\Blackmagic Design\DaVinci Resolve\Fusion\Scripts\Utility`
+3. `make install` (またはWindows: `python scripts/install.py install`) を再実行
+
+### Windows環境でMakefileが使えない
+
+**解決策**:
+
+Pythonスクリプトを直接使用してください：
+
+```bash
+# 環境チェック
+python scripts/install.py check
+
+# インストール
+python scripts/install.py install
+
+# アンインストール
+python scripts/install.py uninstall
+```
 
 ## ライセンス
 

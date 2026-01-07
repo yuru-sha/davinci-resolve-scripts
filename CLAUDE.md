@@ -6,6 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Python scripts for DaVinci Resolve that add decorative frames with EXIF metadata to images. The scripts extract camera settings from photos and RAW files, then generate Polaroid-style frames with the metadata embedded.
 
+**Platform Support**: Cross-platform (macOS and Windows)
+
 ## Architecture
 
 ### Script Variants
@@ -26,7 +28,8 @@ Both scripts share the same underlying logic:
 
 ### Key Technical Details
 
-- **Dynamic library path detection**: Scripts detect site-packages location via (1) environment variable `DAVINCI_RESOLVE_SCRIPTS_VENV`, or (2) path embedded during installation by `make install`. The Makefile automatically detects and embeds the current project's `.venv` path during installation.
+- **Cross-platform installer**: Python-based installer ([scripts/install.py](scripts/install.py)) automatically detects platform (macOS/Windows) and uses appropriate installation paths
+- **Dynamic library path detection**: Scripts detect site-packages location via (1) environment variable `DAVINCI_RESOLVE_SCRIPTS_VENV`, or (2) path embedded during installation. The installer automatically detects and embeds the current project's `.venv` path during installation.
 - **Font fallback system**: Attempts macOS system fonts (SFNS) before falling back to Arial
 - **EXIF tag normalization**: Handles vendor-specific tag names and ratio conversions for camera metadata
 - **Output naming**: Appends `_framed` to original filename; skips files already containing this suffix
@@ -35,11 +38,13 @@ Both scripts share the same underlying logic:
 
 ### Environment Setup
 ```bash
-# Install dependencies using uv (Python 3.13+)
+# Install dependencies using uv (Python 3.11+)
 uv sync
 ```
 
 ### Installation to DaVinci Resolve
+
+**macOS/Linux** (using Makefile):
 ```bash
 # Check environment (Python, libraries, install directory)
 make check
@@ -51,7 +56,21 @@ make install
 make uninstall
 ```
 
-Scripts install to: `~/Library/Application Support/Blackmagic Design/DaVinci Resolve/Fusion/Scripts/Utility`
+**Windows** (or direct Python usage):
+```bash
+# Check environment
+python scripts/install.py check
+
+# Interactive install
+python scripts/install.py install
+
+# Uninstall all scripts
+python scripts/install.py uninstall
+```
+
+**Installation Paths**:
+- **macOS**: `~/Library/Application Support/Blackmagic Design/DaVinci Resolve/Fusion/Scripts/Utility`
+- **Windows**: `%APPDATA%\Blackmagic Design\DaVinci Resolve\Fusion\Scripts\Utility`
 
 ### Linting and Formatting
 ```bash
@@ -68,7 +87,7 @@ make fix
 ## Important Constraints
 
 - Scripts must run inside DaVinci Resolve's Python environment (global `resolve` object required)
-- Dependencies (Pillow, rawpy, exifread) must be installed to a virtual environment; the path is automatically embedded during `make install`
+- Dependencies (Pillow, rawpy, exifread) must be installed to a virtual environment; the path is automatically embedded during installation
 - Studio version relies on Fusion's UIManager for dialog rendering
 - Free version intentionally has no configurable options to avoid Fusion API dependencies
 
@@ -76,7 +95,7 @@ make fix
 
 No automated tests exist. Manual testing workflow:
 
-1. Install script via `make install`
+1. Install script via `make install` (macOS/Linux) or `python scripts/install.py install` (Windows)
 2. Restart DaVinci Resolve
 3. Place timeline playhead over a clip
 4. Run script from Workspace > Scripts > Utility menu
