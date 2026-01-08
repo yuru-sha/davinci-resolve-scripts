@@ -17,9 +17,26 @@ Two versions exist to support different DaVinci Resolve editions:
 - **Studio version** ([add_exif_frame_dv.py](scripts/add_exif_frame_dv.py)): Full UI with customizable options (border color, size, text overrides). Requires DaVinci Resolve Studio's Fusion API.
 - **Free version** ([add_exif_frame_dv_lite.py](scripts/add_exif_frame_dv_lite.py)): Simplified version with fixed white border and Polaroid-style layout. No UI dialogs required.
 
-### Core Components
+### Copy Project Settings Scripts
 
-Both scripts share the same underlying logic:
+Two versions exist to support different DaVinci Resolve editions:
+
+- **Studio version** ([copy_project_settings_dv.py](scripts/copy_project_settings_dv.py)): Interactive UI with Fusion dialogs for project selection and name input. Default name: "Source Copy"
+- **Free version** ([copy_project_settings_dv_lite.py](scripts/copy_project_settings_dv_lite.py)): Console-based interactive prompts with default name suggestion
+
+Both scripts share the same core logic:
+
+1. **Project listing**: Retrieves all projects in current database folder via `GetProjectListInCurrentFolder()`
+2. **Settings extraction**: Uses `GetSetting()` (no parameters) to capture all project configuration
+3. **Project creation**: Creates new project in the same folder with default name "Source Copy" (user editable)
+4. **Settings application**: Applies all extracted settings via `SetSetting()` - read-only settings automatically skip
+5. **Validation**: Reports success/failure counts with detailed failed setting keys
+
+**Important**: Script loads the selected source project, which closes the currently open project.
+
+### EXIF Frame Scripts Core Components
+
+EXIF frame scripts share the same underlying logic:
 
 1. **EXIF extraction**: Dual-path approach handles both standard image formats (JPEG/PNG/TIFF via Pillow) and RAW formats (ARW/CR2/CR3/NEF/DNG/RAF/ORF via rawpy + exifread)
 2. **Image processing**: Generates bordered composite with configurable margins and Polaroid-style bottom border
@@ -86,10 +103,17 @@ make fix
 
 ## Important Constraints
 
+**EXIF Frame Scripts**:
 - Scripts must run inside DaVinci Resolve's Python environment (global `resolve` object required)
 - Dependencies (Pillow, rawpy, exifread) must be installed to a virtual environment; the path is automatically embedded during installation
 - Studio version relies on Fusion's UIManager for dialog rendering
 - Free version intentionally has no configurable options to avoid Fusion API dependencies
+
+**Copy Project Settings Scripts**:
+- Scripts must run inside DaVinci Resolve's Python environment (global `resolve` object required)
+- No external Python dependencies required (uses only DaVinci Resolve API)
+- Studio version relies on Fusion's UIManager for dialog rendering
+- Free version uses console-based interactive prompts
 
 ## Testing Approach
 

@@ -140,44 +140,75 @@ def install_script(script_path: Path, install_dir: Path, site_packages: str):
     print(f"Installed: {script_path.name}")
 
 
+def install_simple_script(script_path: Path, install_dir: Path):
+    """Install a script without dependency path embedding (for scripts without external dependencies)."""
+    import shutil
+
+    target_path = install_dir / script_path.name
+    shutil.copy2(script_path, target_path)
+    print(f"Installed: {script_path.name}")
+
+
 def install():
     """Interactive installation of DaVinci Resolve scripts."""
-    print("Select scripts to install:")
-    print("  1) Free version (add_exif_frame_dv_lite.py)")
-    print("  2) Studio version (add_exif_frame_dv.py)")
+    print("Select script to install:")
+    print("  1) EXIF Frame (Free version)")
+    print("  2) EXIF Frame (Studio version)")
+    print("  3) Copy Project Settings (Free version)")
+    print("  4) Copy Project Settings (Studio version)")
 
-    choice = input("Enter choice [1-2]: ").strip()
+    choice = input("Enter choice [1-4]: ").strip()
 
+    # Determine which scripts to install
     if choice == "1":
-        scripts = ["add_exif_frame_dv_lite.py"]
+        scripts_with_deps = ["add_exif_frame_dv_lite.py"]
+        scripts_simple = []
     elif choice == "2":
-        scripts = ["add_exif_frame_dv.py"]
+        scripts_with_deps = ["add_exif_frame_dv.py"]
+        scripts_simple = []
+    elif choice == "3":
+        scripts_with_deps = []
+        scripts_simple = ["copy_project_settings_dv_lite.py"]
+    elif choice == "4":
+        scripts_with_deps = []
+        scripts_simple = ["copy_project_settings_dv.py"]
     else:
         print("Invalid choice")
         sys.exit(1)
-
-    # Get site-packages path
-    try:
-        site_packages = get_venv_site_packages()
-    except RuntimeError as e:
-        print(f"ERROR: {e}")
-        print("Please run 'uv sync' first to create virtual environment.")
-        sys.exit(1)
-
-    print(f"Using site-packages: {site_packages}")
 
     # Get install directory and create if needed
     install_dir = get_install_dir()
     install_dir.mkdir(parents=True, exist_ok=True)
 
-    # Install selected scripts
     scripts_dir = Path(__file__).parent
-    for script_name in scripts:
-        script_path = scripts_dir / script_name
-        if not script_path.exists():
-            print(f"ERROR: Script not found: {script_path}")
+
+    # Install scripts with dependencies (EXIF Frame scripts)
+    if scripts_with_deps:
+        # Get site-packages path
+        try:
+            site_packages = get_venv_site_packages()
+        except RuntimeError as e:
+            print(f"ERROR: {e}")
+            print("Please run 'uv sync' first to create virtual environment.")
             sys.exit(1)
-        install_script(script_path, install_dir, site_packages)
+
+        print(f"Using site-packages: {site_packages}")
+
+        for script_name in scripts_with_deps:
+            script_path = scripts_dir / script_name
+            if not script_path.exists():
+                print(f"ERROR: Script not found: {script_path}")
+                sys.exit(1)
+            install_script(script_path, install_dir, site_packages)
+
+    # Install scripts without dependencies (Copy Project Settings scripts)
+    if scripts_simple:
+        for script_name in scripts_simple:
+            script_path = scripts_dir / script_name
+            if not script_path.exists():
+                print(f"ERROR: Script not found: {script_path}")
+                sys.exit(1)
+            install_simple_script(script_path, install_dir)
 
     print("Installation complete. Please restart DaVinci Resolve if scripts do not appear.")
 

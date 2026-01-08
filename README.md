@@ -1,8 +1,10 @@
 # DaVinci Resolve Scripts
 
-DaVinci Resolve用のPythonスクリプト集。画像にEXIF情報を含むPolaroid風フレームを追加します。
+DaVinci Resolve用のPythonスクリプト集。画像処理とプロジェクト設定管理のためのツールを提供します。
 
 ## 特徴
+
+### EXIFフレームスクリプト
 
 - **2つのバージョン**: DaVinci Resolve FreeとStudioの両方に対応
   - **Studio版**: カスタマイズ可能なUI（枠色、サイズ、テキストオーバーライド）
@@ -10,6 +12,18 @@ DaVinci Resolve用のPythonスクリプト集。画像にEXIF情報を含むPola
 - **幅広いフォーマット対応**: JPEG、PNG、RAW（ARW/CR2/CR3/NEF/DNG/RAF/ORF）
 - **自動EXIF抽出**: カメラ名、レンズ、撮影設定（焦点距離、絞り、シャッター速度、ISO）
 - **動的パス検出**: 環境に応じてPython依存関係を自動検出
+
+### プロジェクト設定コピースクリプト
+
+- **2つのバージョン**: DaVinci Resolve FreeとStudioの両方に対応
+  - **Studio版**: Fusionダイアログで対話的に操作
+  - **Free版**: コンソール入力による対話型CLI
+- **簡単な設定コピー**: 既存プロジェクトの全設定を新規プロジェクトにコピー
+- **デフォルト名自動生成**: 「ソース名 Copy」形式で提案（編集可能）
+- **詳細レポート**: 適用成功/失敗の詳細を表示
+
+### 共通機能
+
 - **クロスプラットフォーム対応**: macOSとWindows両方で動作
 
 ## 必要要件
@@ -49,7 +63,11 @@ python scripts/install.py check
 ### 3. スクリプトのインストール
 
 ```bash
-# 対話式インストール（FreeまたはStudio版を選択）
+# 対話式インストール（使用したいスクリプトを選択）
+# 1) EXIF Frame (Free version)
+# 2) EXIF Frame (Studio version)
+# 3) Copy Project Settings (Free version)
+# 4) Copy Project Settings (Studio version)
 make install
 ```
 
@@ -76,29 +94,65 @@ python scripts/install.py install
 
 ## 使い方
 
+### EXIFフレームスクリプト
+
 1. DaVinci Resolveでプロジェクトを開く
 2. タイムラインで処理したいクリップの上に再生ヘッドを配置
 3. メニューから **Workspace > Scripts > Utility** を選択
 4. `add_exif_frame_dv.py` (Studio) または `add_exif_frame_dv_lite.py` (Free) を実行
 
-### Studio版の機能
+#### Studio版の機能
 
 - **枠の色**: 白または黒を選択
 - **枠のサイズ**: 0-20%でスライダー調整
 - **テキストオーバーライド**: カメラ名や撮影設定を手動編集可能
 - **Polaroidスタイル**: 下部の枠を大きくするオプション
 
-### Free版の仕様
+#### Free版の仕様
 
 - 固定の白枠Polaroidレイアウト
 - UI設定なし（シンプル設計）
 - Fusion APIの制限を回避
 
+### プロジェクト設定コピースクリプト
+
+1. DaVinci Resolveを起動
+2. データベースを開く
+3. メニューから **Workspace > Scripts > Utility** を選択
+4. `copy_project_settings_dv.py` (Studio) または `copy_project_settings_dv_lite.py` (Free) を実行
+
+#### Studio版の使い方
+
+1. ダイアログでソースプロジェクトを選択
+2. 新規プロジェクト名を入力（デフォルト: 「ソース名 Copy」）
+3. 自動的に設定がコピーされた新規プロジェクトが作成される
+4. 結果ダイアログで適用結果を確認
+
+#### Free版の使い方
+
+1. コンソールで番号を入力してプロジェクトを選択
+2. 新規プロジェクト名を入力（Enterでデフォルト値使用）
+3. 設定適用結果がコンソールに表示される
+
+#### 注意事項
+
+- スクリプト実行時にソースプロジェクトがロードされるため、現在開いているプロジェクトは閉じられます
+- 一部の読み取り専用設定は適用できません（自動的にスキップされ、失敗リストに表示されます）
+- 同名プロジェクトが既に存在する場合、エラーメッセージが表示されます
+
 ## 出力
+
+### EXIFフレームスクリプト
 
 - 元の画像と同じディレクトリに `_framed.jpg` という接尾辞付きで保存
 - すでに `_framed` が付いているファイルはスキップ
 - タイムライン上のクリップは自動的に置き換え（Studio版のみ）
+
+### プロジェクト設定コピースクリプト
+
+- **プロジェクト**: ソースプロジェクトと同じフォルダに新規プロジェクトが作成されます
+- **設定**: 全ての設定（解像度、フレームレート、色空間など）が新規プロジェクトに適用されます
+- **レポート**: Studio版はダイアログ、Free版はコンソールで適用結果を表示
 
 ## 開発
 
