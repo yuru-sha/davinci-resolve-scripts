@@ -1,0 +1,159 @@
+{
+  "_description": "Default broadcast format presets for DaVinci Resolve. Setting keys will be validated after running debug_project_settings.py",
+  "_note": "These presets use estimated setting key names. Actual keys may differ based on DaVinci Resolve version.",
+  "presets": {
+    "HD 1080i 59.94 (日本民放)": {
+      "description": "日本の民放HD放送標準フォーマット",
+      "settings": {
+        "timelineResolutionWidth": "1920",
+        "timelineResolutionHeight": "1080",
+        "timelineFrameRate": "59.94",
+        "timelineInterlaceProcessing": "true"
+      }
+    },
+    "HD 1080p 23.976": {
+      "description": "映画的表現のためのHDフォーマット",
+      "settings": {
+        "timelineResolutionWidth": "1920",
+        "timelineResolutionHeight": "1080",
+        "timelineFrameRate": "23.976"
+      }
+    },
+    "HD 1080p 24": {
+      "description": "シネマスタンダードHDフォーマット",
+      "settings": {
+        "timelineResolutionWidth": "1920",
+        "timelineResolutionHeight": "1080",
+        "timelineFrameRate": "24"
+      }
+    },
+    "HD 1080p 25 (PAL)": {
+      "description": "ヨーロッパ/PAL地域標準フォーマット",
+      "settings": {
+        "timelineResolutionWidth": "1920",
+        "timelineResolutionHeight": "1080",
+        "timelineFrameRate": "25"
+      }
+    },
+    "HD 1080p 29.97": {
+      "description": "NTSC地域標準プログレッシブフォーマット",
+      "settings": {
+        "timelineResolutionWidth": "1920",
+        "timelineResolutionHeight": "1080",
+        "timelineFrameRate": "29.97"
+      }
+    },
+    "HD 1080p 30": {
+      "description": "30fps HDプログレッシブフォーマット",
+      "settings": {
+        "timelineResolutionWidth": "1920",
+        "timelineResolutionHeight": "1080",
+        "timelineFrameRate": "30"
+      }
+    },
+    "HD 1080p 50": {
+      "description": "高フレームレートHDフォーマット (PAL派生)",
+      "settings": {
+        "timelineResolutionWidth": "1920",
+        "timelineResolutionHeight": "1080",
+        "timelineFrameRate": "50"
+      }
+    },
+    "HD 1080p 59.94": {
+      "description": "高フレームレートHDフォーマット (NTSC派生)",
+      "settings": {
+        "timelineResolutionWidth": "1920",
+        "timelineResolutionHeight": "1080",
+        "timelineFrameRate": "59.94"
+      }
+    },
+    "HD 1080p 60": {
+      "description": "60fps 高フレームレートHDフォーマット",
+      "settings": {
+        "timelineResolutionWidth": "1920",
+        "timelineResolutionHeight": "1080",
+        "timelineFrameRate": "60"
+      }
+    },
+    "4K UHD 23.976": {
+      "description": "4K UHD 映画的フォーマット",
+      "settings": {
+        "timelineResolutionWidth": "3840",
+        "timelineResolutionHeight": "2160",
+        "timelineFrameRate": "23.976"
+      }
+    },
+    "4K UHD 24": {
+      "description": "4K UHD シネマスタンダード",
+      "settings": {
+        "timelineResolutionWidth": "3840",
+        "timelineResolutionHeight": "2160",
+        "timelineFrameRate": "24"
+      }
+    },
+    "4K UHD 25": {
+      "description": "4K UHD PAL標準",
+      "settings": {
+        "timelineResolutionWidth": "3840",
+        "timelineResolutionHeight": "2160",
+        "timelineFrameRate": "25"
+      }
+    },
+    "4K UHD 29.97": {
+      "description": "4K UHD NTSC標準",
+      "settings": {
+        "timelineResolutionWidth": "3840",
+        "timelineResolutionHeight": "2160",
+        "timelineFrameRate": "29.97"
+      }
+    },
+    "4K UHD 30": {
+      "description": "4K UHD 30fps",
+      "settings": {
+        "timelineResolutionWidth": "3840",
+        "timelineResolutionHeight": "2160",
+        "timelineFrameRate": "30"
+      }
+    },
+    "4K UHD 50": {
+      "description": "4K UHD 高フレームレート (PAL)",
+      "settings": {
+        "timelineResolutionWidth": "3840",
+        "timelineResolutionHeight": "2160",
+        "timelineFrameRate": "50"
+      }
+    },
+    "4K UHD 59.94": {
+      "description": "4K UHD 高フレームレート (NTSC)",
+      "settings": {
+        "timelineResolutionWidth": "3840",
+        "timelineResolutionHeight": "2160",
+        "timelineFrameRate": "59.94"
+      }
+    },
+    "4K UHD 60": {
+      "description": "4K UHD 60fps",
+      "settings": {
+        "timelineResolutionWidth": "3840",
+        "timelineResolutionHeight": "2160",
+        "timelineFrameRate": "60"
+      }
+    },
+    "DCI 4K 23.976": {
+      "description": "デジタルシネマ4K 23.976fps",
+      "settings": {
+        "timelineResolutionWidth": "4096",
+        "timelineResolutionHeight": "2160",
+        "timelineFrameRate": "23.976"
+      }
+    },
+    "DCI 4K 24": {
+      "description": "デジタルシネマ4K 24fps",
+      "settings": {
+        "timelineResolutionWidth": "4096",
+        "timelineResolutionHeight": "2160",
+        "timelineFrameRate": "24"
+      }
+    }
+  }
+}

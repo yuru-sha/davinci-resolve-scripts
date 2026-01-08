@@ -4,27 +4,41 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Python scripts for DaVinci Resolve that add decorative frames with EXIF metadata to images. The scripts extract camera settings from photos and RAW files, then generate Polaroid-style frames with the metadata embedded.
+Python scripts for DaVinci Resolve with two main feature sets:
+
+1. **EXIF Frame Scripts**: Add decorative frames with EXIF metadata to images
+2. **Broadcast Format Scripts**: Apply broadcast format presets to project settings
 
 **Platform Support**: Cross-platform (macOS and Windows)
 
 ## Architecture
 
-### Script Variants
+### EXIF Frame Scripts
 
 Two versions exist to support different DaVinci Resolve editions:
 
 - **Studio version** ([add_exif_frame_dv.py](scripts/add_exif_frame_dv.py)): Full UI with customizable options (border color, size, text overrides). Requires DaVinci Resolve Studio's Fusion API.
 - **Free version** ([add_exif_frame_dv_lite.py](scripts/add_exif_frame_dv_lite.py)): Simplified version with fixed white border and Polaroid-style layout. No UI dialogs required.
 
+### Broadcast Format Scripts
+
+- **Studio version** ([set_broadcast_format_dv.py](scripts/set_broadcast_format_dv.py)): Apply broadcast format presets (HD, 4K UHD, DCI 4K) to project settings. Features UI for preset selection, custom preset creation, and saving current settings.
+- **Debug utility** ([debug_project_settings.py](scripts/debug_project_settings.py)): Dumps all available project settings to a JSON file for investigating setting keys.
+
 ### Core Components
 
-Both scripts share the same underlying logic:
+**EXIF Frame Scripts** share the same underlying logic:
 
 1. **EXIF extraction**: Dual-path approach handles both standard image formats (JPEG/PNG/TIFF via Pillow) and RAW formats (ARW/CR2/CR3/NEF/DNG/RAF/ORF via rawpy + exifread)
 2. **Image processing**: Generates bordered composite with configurable margins and Polaroid-style bottom border
 3. **Text rendering**: Automatically formats camera name, lens model, and shooting parameters (focal length, aperture, shutter speed, ISO)
 4. **DaVinci Resolve integration**: Operates on timeline clips under the playhead, replacing them with framed versions
+
+**Broadcast Format Scripts**:
+
+1. **Preset management**: Load built-in presets from JSON ([presets/broadcast_presets.json](presets/broadcast_presets.json)) and custom presets from user directory
+2. **Settings application**: Apply presets using `project.SetSetting()` API
+3. **Custom preset storage**: Save current project settings as reusable presets in user's application support directory
 
 ### Key Technical Details
 
@@ -72,6 +86,12 @@ python scripts/install.py uninstall
 - **macOS**: `~/Library/Application Support/Blackmagic Design/DaVinci Resolve/Fusion/Scripts/Utility`
 - **Windows**: `%APPDATA%\Blackmagic Design\DaVinci Resolve\Fusion\Scripts\Utility`
 
+**Available Scripts**:
+1. EXIF Frame - Free version
+2. EXIF Frame - Studio version
+3. Broadcast Format - Studio version (includes preset file installation)
+4. Debug - Project Settings Dumper
+
 ### Linting and Formatting
 ```bash
 # Run linter
@@ -87,9 +107,10 @@ make fix
 ## Important Constraints
 
 - Scripts must run inside DaVinci Resolve's Python environment (global `resolve` object required)
-- Dependencies (Pillow, rawpy, exifread) must be installed to a virtual environment; the path is automatically embedded during installation
-- Studio version relies on Fusion's UIManager for dialog rendering
-- Free version intentionally has no configurable options to avoid Fusion API dependencies
+- **EXIF Frame scripts**: Dependencies (Pillow, rawpy, exifread) must be installed to a virtual environment; the path is automatically embedded during installation
+- **Broadcast Format scripts**: No external dependencies required (uses only DaVinci Resolve API)
+- Studio version scripts rely on Fusion's UIManager for dialog rendering
+- Free version scripts intentionally have no UI to avoid Fusion API dependencies
 
 ## Testing Approach
 

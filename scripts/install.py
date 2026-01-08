@@ -140,44 +140,103 @@ def install_script(script_path: Path, install_dir: Path, site_packages: str):
     print(f"Installed: {script_path.name}")
 
 
+def install_simple_script(script_path: Path, install_dir: Path):
+    """Install a simple script without path modification."""
+    # Read source script
+    content = script_path.read_text(encoding="utf-8")
+
+    # Write to install directory without modification
+    target_path = install_dir / script_path.name
+    target_path.write_text(content, encoding="utf-8")
+    print(f"Installed: {script_path.name}")
+
+
+def install_preset_file(preset_path: Path, install_dir: Path):
+    """Install preset file to the script installation directory."""
+    # Create presets subdirectory in install directory
+    presets_dir = install_dir.parent / "presets"
+    presets_dir.mkdir(parents=True, exist_ok=True)
+
+    # Copy preset file
+    content = preset_path.read_text(encoding="utf-8")
+    target_path = presets_dir / preset_path.name
+    target_path.write_text(content, encoding="utf-8")
+    print(f"Installed preset: {preset_path.name} to {presets_dir}")
+
+
 def install():
     """Interactive installation of DaVinci Resolve scripts."""
     print("Select scripts to install:")
-    print("  1) Free version (add_exif_frame_dv_lite.py)")
-    print("  2) Studio version (add_exif_frame_dv.py)")
+    print("  1) EXIF Frame - Free version (add_exif_frame_dv_lite.py)")
+    print("  2) EXIF Frame - Studio version (add_exif_frame_dv.py)")
+    print("  3) Broadcast Format - Studio version (set_broadcast_format_dv.py)")
+    print("  4) Debug - Project Settings Dumper (debug_project_settings.py)")
 
-    choice = input("Enter choice [1-2]: ").strip()
+    choice = input("Enter choice [1-4]: ").strip()
 
-    if choice == "1":
-        scripts = ["add_exif_frame_dv_lite.py"]
-    elif choice == "2":
-        scripts = ["add_exif_frame_dv.py"]
-    else:
-        print("Invalid choice")
-        sys.exit(1)
-
-    # Get site-packages path
-    try:
-        site_packages = get_venv_site_packages()
-    except RuntimeError as e:
-        print(f"ERROR: {e}")
-        print("Please run 'uv sync' first to create virtual environment.")
-        sys.exit(1)
-
-    print(f"Using site-packages: {site_packages}")
-
-    # Get install directory and create if needed
+    scripts_dir = Path(__file__).parent
     install_dir = get_install_dir()
     install_dir.mkdir(parents=True, exist_ok=True)
 
-    # Install selected scripts
-    scripts_dir = Path(__file__).parent
-    for script_name in scripts:
-        script_path = scripts_dir / script_name
+    if choice == "1":
+        # EXIF Frame Free version (requires venv path)
+        try:
+            site_packages = get_venv_site_packages()
+        except RuntimeError as e:
+            print(f"ERROR: {e}")
+            print("Please run 'uv sync' first to create virtual environment.")
+            sys.exit(1)
+        print(f"Using site-packages: {site_packages}")
+
+        script_path = scripts_dir / "add_exif_frame_dv_lite.py"
         if not script_path.exists():
             print(f"ERROR: Script not found: {script_path}")
             sys.exit(1)
         install_script(script_path, install_dir, site_packages)
+
+    elif choice == "2":
+        # EXIF Frame Studio version (requires venv path)
+        try:
+            site_packages = get_venv_site_packages()
+        except RuntimeError as e:
+            print(f"ERROR: {e}")
+            print("Please run 'uv sync' first to create virtual environment.")
+            sys.exit(1)
+        print(f"Using site-packages: {site_packages}")
+
+        script_path = scripts_dir / "add_exif_frame_dv.py"
+        if not script_path.exists():
+            print(f"ERROR: Script not found: {script_path}")
+            sys.exit(1)
+        install_script(script_path, install_dir, site_packages)
+
+    elif choice == "3":
+        # Broadcast Format Studio version (no venv required)
+        script_path = scripts_dir / "set_broadcast_format_dv.py"
+        if not script_path.exists():
+            print(f"ERROR: Script not found: {script_path}")
+            sys.exit(1)
+        install_simple_script(script_path, install_dir)
+
+        # Install preset file
+        preset_path = scripts_dir.parent / "presets" / "broadcast_presets.json"
+        if not preset_path.exists():
+            print(f"WARNING: Preset file not found: {preset_path}")
+            print("Script will be installed but presets will not be available.")
+        else:
+            install_preset_file(preset_path, install_dir)
+
+    elif choice == "4":
+        # Debug script (no venv required)
+        script_path = scripts_dir / "debug_project_settings.py"
+        if not script_path.exists():
+            print(f"ERROR: Script not found: {script_path}")
+            sys.exit(1)
+        install_simple_script(script_path, install_dir)
+
+    else:
+        print("Invalid choice")
+        sys.exit(1)
 
     print("Installation complete. Please restart DaVinci Resolve if scripts do not appear.")
 
