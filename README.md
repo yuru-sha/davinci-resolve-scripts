@@ -13,11 +13,11 @@ DaVinci Resolve用のPythonスクリプト集。画像処理とプロジェク�
 - **自動EXIF抽出**: カメラ名、レンズ、撮影設定（焦点距離、絞り、シャッター速度、ISO）
 - **動的パス検出**: 環境に応じてPython依存関係を自動検出
 
-### プロジェクト設定コピースクリプト
+### プロジェクト設定コピースクリプト（Studio専用）
 
-- **2つのバージョン**: DaVinci Resolve FreeとStudioの両方に対応
-  - **Studio版**: Fusionダイアログで対話的に操作
-  - **Free版**: コンソール入力による対話型CLI
+- **Studio版のみ対応**: DaVinci Resolve Studio専用機能
+  - Fusionダイアログで対話的に操作
+  - Free版ではUI機能が利用できないため非対応
 - **簡単な設定コピー**: 既存プロジェクトの全設定を新規プロジェクトにコピー
 - **デフォルト名自動生成**: 「ソース名 Copy」形式で提案（編集可能）
 - **詳細レポート**: 適用成功/失敗の詳細を表示
@@ -64,7 +64,7 @@ python scripts/install.py check
 
 ```bash
 # 対話式インストール（Free版またはStudio版を選択）
-# Free版: EXIF Frame (Lite) + Copy Project Settings (Lite)
+# Free版: EXIF Frame (Lite) のみ
 # Studio版: EXIF Frame + Copy Project Settings
 make install
 ```
@@ -112,25 +112,19 @@ python scripts/install.py install
 - UI設定なし（シンプル設計）
 - Fusion APIの制限を回避
 
-### プロジェクト設定コピースクリプト
+### プロジェクト設定コピースクリプト（Studio専用）
 
-1. DaVinci Resolveを起動
+1. DaVinci Resolve Studioを起動
 2. データベースを開く
 3. メニューから **Workspace > Scripts > Utility** を選択
-4. `copy_project_settings_dv.py` (Studio) または `copy_project_settings_dv_lite.py` (Free) を実行
+4. `copy_project_settings_dv.py` を実行
 
-#### Studio版の使い方
+#### 使い方
 
 1. ダイアログでソースプロジェクトを選択
 2. 新規プロジェクト名を入力（デフォルト: 「ソース名 Copy」）
 3. 自動的に設定がコピーされた新規プロジェクトが作成される
 4. 結果ダイアログで適用結果を確認
-
-#### Free版の使い方
-
-1. コンソールで番号を入力してプロジェクトを選択
-2. 新規プロジェクト名を入力（Enterでデフォルト値使用）
-3. 設定適用結果がコンソールに表示される
 
 #### 注意事項
 
@@ -146,11 +140,11 @@ python scripts/install.py install
 - すでに `_framed` が付いているファイルはスキップ
 - タイムライン上のクリップは自動的に置き換え（Studio版のみ）
 
-### プロジェクト設定コピースクリプト
+### プロジェクト設定コピースクリプト（Studio専用）
 
 - **プロジェクト**: ソースプロジェクトと同じフォルダに新規プロジェクトが作成されます
 - **設定**: 全ての設定（解像度、フレームレート、色空間など）が新規プロジェクトに適用されます
-- **レポート**: Studio版はダイアログ、Free版はコンソールで適用結果を表示
+- **レポート**: ダイアログで適用結果を表示
 
 ## 開発
 

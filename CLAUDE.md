@@ -17,14 +17,13 @@ Two versions exist to support different DaVinci Resolve editions:
 - **Studio version** ([add_exif_frame_dv.py](scripts/add_exif_frame_dv.py)): Full UI with customizable options (border color, size, text overrides). Requires DaVinci Resolve Studio's Fusion API.
 - **Free version** ([add_exif_frame_dv_lite.py](scripts/add_exif_frame_dv_lite.py)): Simplified version with fixed white border and Polaroid-style layout. No UI dialogs required.
 
-### Copy Project Settings Scripts
+### Copy Project Settings Script
 
-Two versions exist to support different DaVinci Resolve editions:
+**Studio version only** ([copy_project_settings_dv.py](scripts/copy_project_settings_dv.py)): Interactive UI with Fusion dialogs for project selection and name input. Default name: "Source Copy"
 
-- **Studio version** ([copy_project_settings_dv.py](scripts/copy_project_settings_dv.py)): Interactive UI with Fusion dialogs for project selection and name input. Default name: "Source Copy"
-- **Free version** ([copy_project_settings_dv_lite.py](scripts/copy_project_settings_dv_lite.py)): Console-based interactive prompts with default name suggestion
+This script requires DaVinci Resolve Studio's Fusion API for user interaction. Free version cannot support this functionality due to lack of UI capabilities.
 
-Both scripts share the same core logic:
+Core functionality:
 
 1. **Project listing**: Retrieves all projects in current database folder via `GetProjectListInCurrentFolder()`
 2. **Settings extraction**: Uses `GetSetting()` (no parameters) to capture all project configuration
@@ -109,11 +108,10 @@ make fix
 - Studio version relies on Fusion's UIManager for dialog rendering
 - Free version intentionally has no configurable options to avoid Fusion API dependencies
 
-**Copy Project Settings Scripts**:
-- Scripts must run inside DaVinci Resolve's Python environment (global `resolve` object required)
+**Copy Project Settings Script** (Studio only):
+- Script must run inside DaVinci Resolve Studio's Python environment (global `resolve` object required)
 - No external Python dependencies required (uses only DaVinci Resolve API)
-- Studio version relies on Fusion's UIManager for dialog rendering
-- Free version uses console-based interactive prompts
+- Requires Fusion's UIManager for dialog rendering (Studio exclusive feature)
 
 ## Testing Approach
 

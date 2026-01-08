@@ -152,15 +152,15 @@ def install_simple_script(script_path: Path, install_dir: Path):
 def install():
     """Interactive installation of DaVinci Resolve scripts."""
     print("Select version to install:")
-    print("  1) Free version (all Free scripts)")
-    print("  2) Studio version (all Studio scripts)")
+    print("  1) Free version (EXIF Frame Lite only)")
+    print("  2) Studio version (all scripts)")
 
     choice = input("Enter choice [1-2]: ").strip()
 
     # Determine which scripts to install
     if choice == "1":
         scripts_with_deps = ["add_exif_frame_dv_lite.py"]
-        scripts_simple = ["copy_project_settings_dv_lite.py"]
+        scripts_simple = []
         version_name = "Free"
     elif choice == "2":
         scripts_with_deps = ["add_exif_frame_dv.py"]
@@ -197,7 +197,7 @@ def install():
                 sys.exit(1)
             install_script(script_path, install_dir, site_packages)
 
-    # Install scripts without dependencies (Copy Project Settings scripts)
+    # Install scripts without dependencies (Copy Project Settings - Studio only)
     if scripts_simple:
         for script_name in scripts_simple:
             script_path = scripts_dir / script_name
