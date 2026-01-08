@@ -63,11 +63,9 @@ python scripts/install.py check
 ### 3. スクリプトのインストール
 
 ```bash
-# 対話式インストール（使用したいスクリプトを選択）
-# 1) EXIF Frame (Free version)
-# 2) EXIF Frame (Studio version)
-# 3) Copy Project Settings (Free version)
-# 4) Copy Project Settings (Studio version)
+# 対話式インストール（Free版またはStudio版を選択）
+# Free版: EXIF Frame (Lite) + Copy Project Settings (Lite)
+# Studio版: EXIF Frame + Copy Project Settings
 make install
 ```
 

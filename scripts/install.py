@@ -151,30 +151,26 @@ def install_simple_script(script_path: Path, install_dir: Path):
 
 def install():
     """Interactive installation of DaVinci Resolve scripts."""
-    print("Select script to install:")
-    print("  1) EXIF Frame (Free version)")
-    print("  2) EXIF Frame (Studio version)")
-    print("  3) Copy Project Settings (Free version)")
-    print("  4) Copy Project Settings (Studio version)")
+    print("Select version to install:")
+    print("  1) Free version (all Free scripts)")
+    print("  2) Studio version (all Studio scripts)")
 
-    choice = input("Enter choice [1-4]: ").strip()
+    choice = input("Enter choice [1-2]: ").strip()
 
     # Determine which scripts to install
     if choice == "1":
         scripts_with_deps = ["add_exif_frame_dv_lite.py"]
-        scripts_simple = []
+        scripts_simple = ["copy_project_settings_dv_lite.py"]
+        version_name = "Free"
     elif choice == "2":
         scripts_with_deps = ["add_exif_frame_dv.py"]
-        scripts_simple = []
-    elif choice == "3":
-        scripts_with_deps = []
-        scripts_simple = ["copy_project_settings_dv_lite.py"]
-    elif choice == "4":
-        scripts_with_deps = []
         scripts_simple = ["copy_project_settings_dv.py"]
+        version_name = "Studio"
     else:
         print("Invalid choice")
         sys.exit(1)
+
+    print(f"\nInstalling {version_name} version scripts...")
 
     # Get install directory and create if needed
     install_dir = get_install_dir()
@@ -210,7 +206,11 @@ def install():
                 sys.exit(1)
             install_simple_script(script_path, install_dir)
 
-    print("Installation complete. Please restart DaVinci Resolve if scripts do not appear.")
+    print(f"\nInstallation complete ({version_name} version).")
+    print("Installed scripts:")
+    for script in scripts_with_deps + scripts_simple:
+        print(f"  - {script}")
+    print("\nPlease restart DaVinci Resolve if scripts do not appear.")
 
 
 def uninstall():
